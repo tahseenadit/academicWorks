@@ -1,0 +1,128 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <omp.h>
+#include <string.h>
+#include <time.h>
+#include <sys/time.h>
+
+#define NUM_THREADS 3
+
+int main(int argc, char *argv[]){
+
+  FILE *f;
+  char *line = NULL;
+  size_t len = 0;
+  char *number = NULL;
+  int size_of_rows_column_values[3];
+  int i = 0;
+  struct timeval start, end;
+  int threads_num;
+  int matrix_size_row;
+  int matrix_size_col;
+ 
+  if(argc == 3) 
+  {
+    if(atoi(argv[2]) > 23560){
+      printf("Please provide matrix size less than 23561.\n");
+      return 0;
+    }else{
+
+      threads_num = atoi(argv[1]);
+      matrix_size_row = atoi(argv[2]);
+      matrix_size_col = atoi(argv[2]);
+   
+    } 
+  }else{
+    printf("Please provide number of threads and matrix size as arguments.\n");
+    return 0;
+  } 
+
+  if((f = fopen("af23560.mtx", "r")) == NULL){
+    return 0;
+  }
+  
+  getline(&line, &len, f);
+  getline(&line, &len, f);
+  number = strtok(line, " ");
+  while(number != NULL){
+    size_of_rows_column_values[i] = atoi(number);
+    i++;
+    number = strtok(NULL, " ");    
+  }
+
+  int vector[size_of_rows_column_values[2]];
+  //int result[size_of_rows_column_values[1]];
+  //int vector[matrix_size_row];
+  int result[matrix_size_col];
+  int rows_ptr[size_of_rows_column_values[2]];
+  int col_index[size_of_rows_column_values[2]];
+  int csr_values[size_of_rows_column_values[2]];
+  int all_values_of_a_line[3];
+  int k = 0;  
+  
+  #pragma omp parallel
+  {
+     #pragma omp for schedule(static)     
+     for(k = 0; k < size_of_rows_column_values[2]; k++)
+     {
+        vector[k] = rand() % 100 + 1;
+     }     
+  }
+
+  k = 0;
+
+  while(k < size_of_rows_column_values[2]){
+
+    getline(&line, &len, f);
+    number = strtok(line, " ");
+    i = 0;
+    while(number != NULL){
+      all_values_of_a_line[i] = atoi(number);
+      i++;
+      number = strtok(NULL, " ");    
+    }
+    
+    rows_ptr[k] = abs(all_values_of_a_line[0]);
+    col_index[k] = abs(all_values_of_a_line[1]);
+    csr_values[k] = abs(all_values_of_a_line[2]);
+    k++;
+  }
+
+  gettimeofday(&start, NULL);
+
+  #pragma omp parallel num_threads(threads_num)
+  {
+        #pragma omp for schedule(static)
+	for (int i = 1; i <= matrix_size_col; i++)
+	{
+		int m = 1;
+	 	for (int j = 1; j <= size_of_rows_column_values[2] ; j++)
+	 	{
+		  if(col_index[j-1]==i){
+		    result[i-1] += abs(csr_values[j-1])*vector[m-1];
+		    m++;
+		  }
+		  if(m > matrix_size_row){
+                    break;
+		  }
+        	}
+	        printf("%d : %d\n", i, result[i-1]);
+	}
+  } 
+
+  gettimeofday(&end, NULL);
+  double time = (end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec) * 0.000001;
+  //printf("Time Taken : %ld\n", ((end.tv_sec * 1000000 + end.tv_usec) - (start.tv_sec * 1000000 + start.tv_usec)));  
+  printf("Time Taken: %lf sec\n", time);
+
+  fclose(f);
+  if(line){
+    free(line);
+  }
+  if(number){
+    free(number);
+  }
+  return 0;
+
+}

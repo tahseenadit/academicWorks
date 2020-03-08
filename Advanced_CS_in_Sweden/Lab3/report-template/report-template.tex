@@ -1,0 +1,145 @@
+\documentclass[oneside,a4paper]{article}
+
+% ========== Preamble (packages, definitions etc.) ==========
+% You don't have to change these!
+
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage{csquotes}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{lmodern}
+
+\setlength{\parskip}{\baselineskip}
+
+\newcounter{questionnum} \setcounter{questionnum}{0}
+\newcommand{\question}[1]{%
+  \refstepcounter{questionnum}%
+  \paragraph{Question~\arabic{questionnum}:}{\emph{#1}}}
+
+\newcommand\filltoend{\leavevmode{\unskip
+  \leaders\hrule height.5ex depth\dimexpr-.5ex+0.4pt\hfill\hbox{}%
+  \parfillskip=0pt\endgraf}}
+
+\newcommand{\problem}[2]{%
+	\vspace{-0.7em}
+	\hspace{0.02\textwidth}
+	\begin{minipage}[t][][b]{0.95\textwidth}
+		{\bf \hspace{-0.015\textwidth}\makebox[7.5em][l]{{#1} ~~\filltoend}}%
+		\hspace{1.2mm}{\it #2}%
+	\end{minipage}
+}
+
+\lstset{ % Set the default style for code listings
+	numbers=left, 
+	numberstyle=\scriptsize, 
+	numbersep=8pt,
+	basicstyle=\scriptsize\ttfamily,
+	keywordstyle=\color{blue},
+	stringstyle=\color{red},
+	commentstyle=\color{green!70!black},
+	breaklines=true,
+	frame=single, 
+	language=C,
+	tabsize=4,
+	showstringspaces=false
+}
+
+% ========== Title page ==========
+% Edit this with the correct information.
+
+\title{
+	\includegraphics[width=0.6\textwidth]{UU_logo.pdf}\\[1em]
+	Report for 1DT086 and 1DT032\\[1em]
+	Lab X: Topic\\[3em]
+	Group NN
+}
+
+\author{
+	Firstname Lastname \and
+	Firstname Lastname \and
+	Firstname Lastname
+}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty} % Removes page number for front page
+\pagebreak
+
+% ========== Document contents ==========
+% This is the body of your document. Replace the below with the contents of your report.
+
+\section{My Section Title}
+
+To use \LaTeX, the following software is recommended, depending on your operating system.
+\begin{itemize}
+	\item On {\it Linux} use {\bf TeX Live} (install via your package manager)
+	\item On {\it Mac OS}, use {\bf MacTeX} (see \url{http://www.tug.org/mactex/})
+	\item On {\it Windows}, use {\bf MiKTeX} (see \url{https://miktex.org/})
+	\item Alternatively, a web based solution that also supports collaborative editing is {\bf Overleaf} (see \url{https://www.overleaf.com/})
+\end{itemize}
+
+There are many, many \LaTeX\ tutorials online. For example \href{https://www.overleaf.com/learn/latex/Learn_LaTeX_in_30_minutes}{this one} from the Overleaf team.
+
+% Use subsection if needed.
+\subsection{My subsection title}
+
+To compile this {\tt .tex} file on a Linux machine with Tex Live installed, just run {\tt pdflatex} from a terminal, like so.
+
+\fbox{\tt pdflatex report-template.tex}
+
+This will produce the output file {\tt report-template.pdf}.
+
+% Usually you want to avoid too many levels. Use subsubsection very sparingly.
+\subsubsection{My subsubsection title}
+
+\paragraph{Answer to Question 1.1.} Answering a short question can be convenient in a paragraph like this. For long answers you may want more structure, though. By the way, here is an inline formula claiming (quite truthfully) that $\sin(\pi) = 0$. For more complicated formulae, like this one about the alternating harmonic series, it is better to display them as follows.
+$$
+\sum_{n=1}^\infty {(-1)^{n-1} \over n} = \ln(2)
+$$
+One of the best aspects of \TeX\ and \LaTeX\ is how well mathematics is typeset. Of course, you will not really need that for your current report.
+
+\section{Another Section Title}
+
+To include a source code listing, just use an {\tt lstlisting} environment. The default code listing style for the reports was already set in the preamble of this template. You will note that it includes syntax highlighting for C code. Here is an example:
+
+\begin{lstlisting}
+#include <stdio.h>
+
+int main() {
+	printf("Good bye, world!\n");
+	return 0;
+}
+\end{lstlisting}
+
+If you wish, you can add a caption to the listing. You can also let \LaTeX\ automatically handle references to listings, figures etc. by putting a \emph{label} on it and then refer to it, just like we did with Listing~\ref{myprogram}. You'll notice, though, that this requires you to run {\tt pdflatex} twice.
+
+\begin{lstlisting}[caption={I'm very proud of this program}, label={myprogram}]
+#include <stdio.h>
+
+int main() {
+	if (1 + 1 > 3) {
+		printf("The world is crazy!\n");
+	}
+	return 0;
+}
+\end{lstlisting}
+
+% You could also include the source from a file, and change some settings as well.
+% \lstinputlisting[language=Python]{source_filename.py}
+
+Of course, you can include figures like in Figure~\ref{myfigure} where we just reused the image file with the university seal again.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.4\textwidth]{UU_logo.pdf}
+	\caption{The university seal, from around the year 1600.}
+	\label{myfigure}
+\end{figure}
+
+
+\end{document}
+

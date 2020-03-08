@@ -1,0 +1,73 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <time.h>
+#include <unistd.h>
+#include <sys/wait.h>
+#include <string.h>
+
+#include "led_matrix.h"
+
+int main(){
+
+  int pid;
+  char input[100];
+
+  while(1)
+  {
+    pid=-1;
+    printf("myshell > ");
+    scanf(" %s", input);
+
+    if (strcmp(input,"ls")==0){
+      pid = fork();
+
+      if(pid==0){
+	if(execl("/bin/ls","ls",(char *) NULL)==-1){
+	  return -1;
+	}
+	
+      }
+    }
+    else if (strcmp(input,"pstree")==0){
+      pid = fork();
+
+      if(pid==0){
+	if(execl("/usr/bin/pstree","pstree",(char *) NULL)==-1){
+	  return -1;
+	}
+
+      }
+    }
+    else if (strcmp(input,"htop")==0){
+      pid = fork();
+
+      if(pid==0){
+	if(execl("/usr/bin/htop","htop",(char *) NULL)==-1){
+	  return -1;
+	}
+
+      }
+    }
+    else if (strcmp(input,"ifconfig")==0){
+      pid = fork();
+
+      if(pid==0){
+	if(execl("/sbin/ifconfig","ifconfig",(char *) NULL)==-1){
+	  return -1;
+	}
+
+      }
+    }
+    else if (strcmp(input,"quit")==0){
+      break;
+    }
+    else printf("Command unknown");    
+
+    printf("\n");
+    wait(NULL);
+    
+  }
+
+  return 0;
+}
